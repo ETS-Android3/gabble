@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "154149295619",
+    "project_id": "gabble-348ea",
+    "storage_bucket": "gabble-348ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154149295619:android:3cc935c9a49af175f42036",
+        "android_client_info": {
+          "package_name": "com.example.gabble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154149295619-f1cr2q7q46e4ols30ilhgtv473lbi06l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_xEskXMxWy6ystdXMDmcN65FUQk3nFtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154149295619-f1cr2q7q46e4ols30ilhgtv473lbi06l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
