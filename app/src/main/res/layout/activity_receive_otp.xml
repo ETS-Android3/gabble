@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sendOtp">
+    tools:context=".activities.sendOtp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:text="Enter Otp"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:textColor="@color/colorTextFirst"
+                android:textColor="@color/primary_text"
                 />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="18sp"
                 android:gravity="center"
-                android:textColor="@color/colorTextSecond"
+                android:textColor="@color/secondary_text"
                 />
 
             <TextView
@@ -71,7 +71,7 @@
                     android:textAlignment="center"
                     android:background="@drawable/bgbox"
                     android:maxLength="1"
-                    android:textColor="@color/colorTextFirst"
+                    android:textColor="@color/primary_text"
                     android:textSize="20sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="5dp"
@@ -87,7 +87,7 @@
                     android:textAlignment="center"
                     android:background="@drawable/bgbox"
                     android:maxLength="1"
-                    android:textColor="@color/colorTextFirst"
+                    android:textColor="@color/primary_text"
                     android:textSize="20sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="5dp"
@@ -102,7 +102,7 @@
                     android:textAlignment="center"
                     android:background="@drawable/bgbox"
                     android:maxLength="1"
-                    android:textColor="@color/colorTextFirst"
+                    android:textColor="@color/primary_text"
                     android:textSize="20sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="5dp"
@@ -117,7 +117,7 @@
                     android:textAlignment="center"
                     android:background="@drawable/bgbox"
                     android:maxLength="1"
-                    android:textColor="@color/colorTextFirst"
+                    android:textColor="@color/primary_text"
                     android:textSize="20sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="5dp"
@@ -132,7 +132,7 @@
                     android:background="@drawable/bgbox"
                     android:maxLength="1"
                     android:textAlignment="center"
-                    android:textColor="@color/colorTextFirst"
+                    android:textColor="@color/primary_text"
                     android:textSize="20sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="5dp"
@@ -147,7 +147,7 @@
                     android:textAlignment="center"
                     android:background="@drawable/bgbox"
                     android:maxLength="1"
-                    android:textColor="@color/colorTextFirst"
+                    android:textColor="@color/primary_text"
                     android:textSize="20sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="5dp"
@@ -160,7 +160,7 @@
                 android:id="@+id/verify"
                 android:layout_marginTop="40dp"
                 android:text="verify"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/yellowTint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

@@ -1,4 +1,4 @@
-package com.example.gabble;
+package com.example.gabble.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
 
+import com.example.gabble.MainActivity;
+import com.example.gabble.R;
+import com.example.gabble.chat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.net.Inet4Address;
-import java.util.Random;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -35,14 +34,14 @@ public class SplashScreen extends AppCompatActivity {
                 if(firebaseUser!=null) {
                     handler.postDelayed(()->{
                         String mobileNo = firebaseUser.getPhoneNumber();
-                        Intent i = new Intent(SplashScreen.this,chat.class);
+                        Intent i = new Intent(SplashScreen.this, MainActivity.class);
                         i.putExtra("phoneNo",mobileNo);
                         startActivity(i);
                     },2500);
                 }
                 else{
                     handler.postDelayed(()->{
-                        startActivity(new Intent(getApplicationContext(),sendOtp.class));
+                        startActivity(new Intent(getApplicationContext(), sendOtp.class));
                     },2500);
                 }
             }

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">gabble</string>
+    <string name="app_name">Gabble</string>
+    <string name="select_user">Select User</string>
 </resources>

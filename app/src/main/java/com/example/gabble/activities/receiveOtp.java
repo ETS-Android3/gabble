@@ -1,4 +1,4 @@
-package com.example.gabble;
+package com.example.gabble.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gabble.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -62,7 +63,7 @@ public class receiveOtp extends AppCompatActivity {
         resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),sendOtp.class));
+                startActivity(new Intent(getApplicationContext(), sendOtp.class));
             }
         });
     }
@@ -80,7 +81,7 @@ public class receiveOtp extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Intent intent = new Intent(receiveOtp.this,profile.class);
+                            Intent intent = new Intent(receiveOtp.this, profile.class);
                             intent.putExtra("mobileNo",phoneNo);
                             startActivity(intent);
                         }

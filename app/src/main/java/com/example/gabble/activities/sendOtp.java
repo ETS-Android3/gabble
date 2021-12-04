@@ -1,16 +1,12 @@
-package com.example.gabble;
+package com.example.gabble.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +14,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.gabble.R;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
@@ -38,6 +31,7 @@ public class sendOtp extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth mAuth;
     Button send;
+    EditText number;
      // this thing needs to be added to splash
     // screen to avoid sendotp screen from displaying.
 
@@ -46,7 +40,7 @@ public class sendOtp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_otp);
 
-        EditText number = findViewById(R.id.number);
+        number = findViewById(R.id.number);
         send = findViewById(R.id.send);
         progressBar = findViewById(R.id.pg1);
 
@@ -67,6 +61,15 @@ public class sendOtp extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        @SuppressLint("WrongConstant") SharedPreferences sh = getSharedPreferences("userdata",MODE_APPEND);
+        mobileNo = sh.getString("mobile","");
+        number.setText(mobileNo);
+    }
+
     private void sendVerificationCodeToUser() {
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(mAuth)
@@ -83,7 +86,7 @@ public class sendOtp extends AppCompatActivity {
         @Override
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
-            Intent intent = new Intent(sendOtp.this,receiveOtp.class);
+            Intent intent = new Intent(sendOtp.this, receiveOtp.class);
             intent.putExtra("phoneNo",mobileNo);
             intent.putExtra("backendOtp",s);
             startActivity(intent);

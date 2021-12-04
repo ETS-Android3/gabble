@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_text"
             android:textSize="20sp"
             android:text="No Conversations yet. "
             />
@@ -44,11 +44,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:src="@drawable/plus"
+        android:src="@drawable/ch"
         app:tint="@color/white"
         app:borderWidth="0dp"
-        android:background="@color/colorPrimary"
-        android:backgroundTint="@color/colorPrimary"
+        android:background="@color/teal_700"
+        android:backgroundTint="@color/teal_700"
         android:layout_margin="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

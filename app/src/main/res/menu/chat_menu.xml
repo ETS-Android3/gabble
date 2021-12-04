@@ -8,6 +8,11 @@
         app:showAsAction="never"
         />
 
+    <item android:id="@+id/note"
+        android:title="Note to Self"
+        app:showAsAction="never"
+        />
+
     <item
         android:id="@+id/action_settings"
         android:title="Settings"

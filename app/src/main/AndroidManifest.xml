@@ -12,10 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gabble">
         <activity
+            android:name=".activities.UserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".contacts"
+            android:exported="false" />
+        <activity
             android:name=".msgActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.SplashScreen"
             android:exported="true"
             android:theme="@style/Theme.SplashScreen">
             <intent-filter>
@@ -25,23 +31,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".profile"
-            android:exported="true"></activity>
+            android:name=".activities.profile"
+            android:exported="true" />
         <activity
             android:name=".chat"
             android:exported="false"
             android:theme="@style/Theme.Gabble" />
         <activity
-            android:name=".receiveOtp"
+            android:name=".activities.receiveOtp"
             android:exported="false"
-            android:theme="@style/Theme.NoActionBar" />
+            android:theme="@style/Theme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".sendOtp"
+            android:name=".activities.sendOtp"
             android:exported="true"
-            android:theme="@style/Theme.NoActionBar"></activity>
+            android:theme="@style/Theme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
+        <service
+            android:name=".firebase.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
