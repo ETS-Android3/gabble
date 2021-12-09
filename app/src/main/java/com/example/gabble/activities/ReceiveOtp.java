@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
-public class receiveOtp extends AppCompatActivity {
+public class ReceiveOtp extends AppCompatActivity {
 
     EditText et1,et2,et3,et4,et5,et6;
     Button verify;
@@ -63,7 +63,7 @@ public class receiveOtp extends AppCompatActivity {
         resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), sendOtp.class));
+                startActivity(new Intent(getApplicationContext(), SendOtp.class));
             }
         });
     }
@@ -77,16 +77,16 @@ public class receiveOtp extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(receiveOtp.this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(ReceiveOtp.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Intent intent = new Intent(receiveOtp.this, profile.class);
+                            Intent intent = new Intent(ReceiveOtp.this, ProfileActivity.class);
                             intent.putExtra("mobileNo",phoneNo);
                             startActivity(intent);
                         }
                         else{
-                            Toast.makeText(receiveOtp.this, task.getException().getMessage(),
+                            Toast.makeText(ReceiveOtp.this, task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -192,7 +192,7 @@ public class receiveOtp extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                View view = receiveOtp.this.getCurrentFocus();
+                View view = ReceiveOtp.this.getCurrentFocus();
                 if(!s.toString().trim().isEmpty()) {
                     InputMethodManager imm =
                             (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

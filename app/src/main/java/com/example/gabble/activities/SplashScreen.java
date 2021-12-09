@@ -9,7 +9,6 @@ import android.os.Handler;
 
 import com.example.gabble.MainActivity;
 import com.example.gabble.R;
-import com.example.gabble.chat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -41,7 +40,7 @@ public class SplashScreen extends AppCompatActivity {
                 }
                 else{
                     handler.postDelayed(()->{
-                        startActivity(new Intent(getApplicationContext(), sendOtp.class));
+                        startActivity(new Intent(getApplicationContext(), SendOtp.class));
                     },2500);
                 }
             }
@@ -60,4 +59,6 @@ public class SplashScreen extends AppCompatActivity {
         super.onStop();
         mAuth.removeAuthStateListener(authStateListener);
     }
+
+
 }

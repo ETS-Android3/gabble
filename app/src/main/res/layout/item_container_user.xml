@@ -41,14 +41,14 @@
         app:layout_constraintStart_toEndOf="@+id/imageProfile" />
 
     <TextView
-        android:id="@+id/textNumber"
+        android:id="@+id/textAbout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:hint="9026663925"
+        android:hint="Hi there! I am using Gabble."
         android:textColor="@color/secondary_text"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintEnd_toEndOf="parent"

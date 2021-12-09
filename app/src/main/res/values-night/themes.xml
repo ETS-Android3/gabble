@@ -3,6 +3,6 @@
     <style name="Theme.Gabble" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/primary</item>
-        <item name="menu">@menu/chat_menu</item>
+        <item name="menu">@menu/navigation_menu</item>
     </style>
 </resources>

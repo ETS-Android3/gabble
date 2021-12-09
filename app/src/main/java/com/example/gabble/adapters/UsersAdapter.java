@@ -1,13 +1,12 @@
 package com.example.gabble.adapters;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gabble.listeners.UserListener;
 import com.example.gabble.databinding.ItemContainerUserBinding;
 import com.example.gabble.models.User;
 
@@ -16,9 +15,11 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder>{
 
     private final List<User> users;
+    private final UserListener userListener;
 
-    public UsersAdapter(List<User> users) {
+    public UsersAdapter(List<User> users, UserListener userListener) {
         this.users = users;
+        this.userListener = userListener;
     }
 
     @NonNull
@@ -53,7 +54,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
         void setUserData(User user) {
             binding.textName.setText(user.name);
-            binding.textNumber.setText(user.phoneNo);
+            binding.textAbout.setText(user.about);
+            binding.getRoot().setOnClickListener(v -> userListener.onUserClicked(user));
         }
 
     }

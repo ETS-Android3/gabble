@@ -24,7 +24,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-public class sendOtp extends AppCompatActivity {
+public class SendOtp extends AppCompatActivity {
 
     private String mobileNo;
     private String TAG = "otp";
@@ -86,7 +86,7 @@ public class sendOtp extends AppCompatActivity {
         @Override
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
-            Intent intent = new Intent(sendOtp.this, receiveOtp.class);
+            Intent intent = new Intent(SendOtp.this, ReceiveOtp.class);
             intent.putExtra("phoneNo",mobileNo);
             intent.putExtra("backendOtp",s);
             startActivity(intent);
@@ -104,7 +104,7 @@ public class sendOtp extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
             send.setVisibility(View.VISIBLE);
             Log.d(TAG, "onVerificationFailed: "+e.getMessage());
-            Toast.makeText(sendOtp.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(SendOtp.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     };
 
