@@ -66,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         mobileNo = new SendOtp().getMobileNo();
         db = FirebaseFirestore.getInstance();
-        documentReference = db.collection("users").document(mobileNo);
+        documentReference = db.collection(Constants.KEY_COLLECTION_USERS).document(mobileNo);
 
         getSharedData();
         setDiscardButton();
@@ -104,8 +104,12 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 try {
-                    name = documentSnapshot.get("name").toString();
+                    name = documentSnapshot.get(Constants.KEY_NAME).toString();
+                    encodedImage = documentSnapshot.get(Constants.KEY_IMAGE).toString();
+                    about = documentSnapshot.get(Constants.KEY_ABOUT).toString();
                     binding.profileName.setText(name);
+                    binding.profileImage.setImageBitmap(decodeImage(encodedImage));
+                    binding.profileAbout.setText(about);
                 } catch (Exception e) {
 
                 }
