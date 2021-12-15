@@ -76,9 +76,22 @@
         android:id="@+id/viewSupporter"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/primary"
         android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/primary"
         app:layout_constraintTop_toBottomOf="@+id/imageBack" />
+
+    <TextView
+        android:id="@+id/textAvailability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/onlineGreen"
+        android:gravity="center"
+        android:padding="@dimen/_2sdp"
+        android:text="@string/online"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/viewSupporter" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecylerView"
@@ -88,11 +101,11 @@
         android:orientation="vertical"
         android:overScrollMode="never"
         android:padding="@dimen/_20sdp"
-        app:stackFromEnd="true"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@id/viewBackground"
-        app:layout_constraintTop_toBottomOf="@id/viewSupporter" />
+        app:layout_constraintTop_toBottomOf="@id/viewSupporter"
+        app:stackFromEnd="true" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -110,8 +123,8 @@
         android:id="@+id/layoutSend"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_16sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/background_chat_input"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -130,9 +143,9 @@
         android:id="@+id/inputMessage"
         android:layout_width="0dp"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/background_chat_box"
         android:hint="Type a message"
         android:imeOptions="actionNext"
@@ -140,8 +153,8 @@
         android:inputType="textMultiLine"
         android:paddingStart="@dimen/_16sdp"
         android:paddingEnd="@dimen/_16sdp"
-        android:textColor="@color/white"
         android:scrollHorizontally="false"
+        android:textColor="@color/white"
         android:textColorHint="@color/secondary_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/layoutSend"

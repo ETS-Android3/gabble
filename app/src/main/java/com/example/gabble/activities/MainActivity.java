@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ConversationListener {
+public class MainActivity extends BaseActivity implements ConversationListener {
 
     FloatingActionButton fab;
     RoundedImageView imageProfile;
@@ -121,20 +121,20 @@ public class MainActivity extends AppCompatActivity implements ConversationListe
                     ChatMessage chatMessage = new ChatMessage();
                     chatMessage.senderNo = senderNo;
                     chatMessage.receiverNo = receiverNo;
-                    if (sharedPreferences.getString(Constants.KEY_SENDER_MOBILE, "").equals(senderNo)) {
-                        chatMessage.conversationId =
-                                documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
-                        chatMessage.conversationName =
-                                documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
-                        chatMessage.conversationImage =
-                                documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
-                    } else {
-                        chatMessage.conversationName =
-                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
+                    if (sharedPreferences.getString(Constants.KEY_MOBILE, "").equals(senderNo)) {
                         chatMessage.conversationId =
                                 documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
+                        chatMessage.conversationName =
+                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
                         chatMessage.conversationImage =
                                 documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
+                    } else {
+                        chatMessage.conversationName =
+                                documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
+                        chatMessage.conversationId =
+                                documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
+                        chatMessage.conversationImage =
+                                documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
                     }
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE
                     );
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements ConversationListe
                         String senderNo =
                                 documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
                         String receiverNo =
-                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
+                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
                         if (conversations.get(i).senderNo.equals(senderNo) && conversations.get(i).receiverNo.equals(receiverNo)) {
                             conversations.get(i).message =
                                     documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
