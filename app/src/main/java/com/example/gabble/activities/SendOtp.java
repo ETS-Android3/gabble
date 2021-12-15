@@ -32,8 +32,6 @@ public class SendOtp extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button send;
     EditText number;
-     // this thing needs to be added to splash
-    // screen to avoid sendotp screen from displaying.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

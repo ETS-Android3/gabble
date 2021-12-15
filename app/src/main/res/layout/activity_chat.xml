@@ -76,9 +76,9 @@
         android:id="@+id/viewSupporter"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="@color/primary"
         android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintTop_toBottomOf="@+id/imageBack" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecylerView"
@@ -88,6 +88,7 @@
         android:orientation="vertical"
         android:overScrollMode="never"
         android:padding="@dimen/_20sdp"
+        app:stackFromEnd="true"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="@id/viewBackground"
@@ -134,12 +135,13 @@
         android:layout_marginBottom="@dimen/_12sdp"
         android:background="@drawable/background_chat_box"
         android:hint="Type a message"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:importantForAutofill="no"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:paddingStart="@dimen/_16sdp"
         android:paddingEnd="@dimen/_16sdp"
         android:textColor="@color/white"
+        android:scrollHorizontally="false"
         android:textColorHint="@color/secondary_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/layoutSend"

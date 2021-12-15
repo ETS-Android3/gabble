@@ -1,5 +1,8 @@
 package com.example.gabble.adapters;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -55,7 +58,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         void setUserData(User user) {
             binding.textName.setText(user.name);
             binding.textAbout.setText(user.about);
+            binding.imageProfile.setImageBitmap(decodeImage(user.image));
             binding.getRoot().setOnClickListener(v -> userListener.onUserClicked(user));
+        }
+
+        private Bitmap decodeImage(String sImage) {
+            byte[] bytes = Base64.decode(sImage, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            return bitmap;
         }
 
     }

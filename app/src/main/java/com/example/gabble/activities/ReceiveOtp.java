@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gabble.R;
+import com.example.gabble.utilities.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -83,6 +84,8 @@ public class ReceiveOtp extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Intent intent = new Intent(ReceiveOtp.this, ProfileActivity.class);
                             intent.putExtra("mobileNo",phoneNo);
+                            intent.putExtra(Constants.COMING_FROM_WHICH_ACTIVITY,
+                                    Constants.OTP_ACTIVITY);
                             startActivity(intent);
                         }
                         else{

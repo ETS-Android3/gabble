@@ -64,12 +64,12 @@
                     <com.makeramen.roundedimageview.RoundedImageView
                         android:layout_width="@dimen/_180sdp"
                         android:layout_height="@dimen/_180sdp"
-                        android:src="@drawable/ferb"
+                        android:src="@drawable/ic_blank_profile"
                         android:id="@+id/profile_image"
                         android:layout_marginTop="@dimen/_30sdp"
-                        app:riv_corner_radius="@dimen/_110sdp"
-                        app:riv_border_width="@dimen/_1sdp"
-                        app:riv_border_color="@color/secondary_text"
+                        app:riv_corner_radius="@dimen/_90sdp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
                         />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -92,11 +92,30 @@
                     android:layout_marginTop="40dp"
                     android:layout_width="250dp"
                     android:hint="Enter your name"
+                    android:imeOptions="actionNext"
+                    android:maxLength="20"
+                    android:inputType="text"
                     android:layout_height="40dp"
                     android:background="@drawable/bgbox_2"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    />
+
+                <EditText
+                    android:id="@+id/profile_about"
+                    android:layout_marginTop="40dp"
+                    android:layout_width="@dimen/_260sdp"
+                    android:hint="About"
+                    android:imeOptions="actionDone"
+                    android:maxLength="120"
+                    android:layout_height="@dimen/_100sdp"
+                    android:background="@drawable/bgbox_2"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:inputType="textMultiLine"
+                    android:scrollHorizontally="false"
+                    android:padding="@dimen/_2sdp"
                     />
 
                 <Button

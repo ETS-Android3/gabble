@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable-v24/bgbox.xml" value="0.28055555555555556" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.28615384615384615" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/back.xml" value="0.28615384615384615" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/background_chat_box.xml" value="0.28615384615384615" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/background_chat_input.xml" value="0.28615384615384615" />
@@ -14,6 +15,8 @@
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/background_received_message.xml" value="0.28615384615384615" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/background_sent_message.xml" value="0.28615384615384615" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/bgbox_2.xml" value="0.290625" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/ic_add.xml" value="0.28615384615384615" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/ic_back.xml" value="0.28615384615384615" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/ic_baseline_power_settings_new_24.xml" value="0.290625" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.290625" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/drawable/ic_profile.xml" value="0.28615384615384615" />
@@ -23,6 +26,7 @@
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_chat.xml" value="0.25" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_chat2.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_contacts.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_demo.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_listview.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_msg.xml" value="0.27447916666666666" />
@@ -33,13 +37,15 @@
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_user.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/app_bar_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/clone.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/content_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/item_container_received_message.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/item_container_recent_conversation.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/item_container_sent_message.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/item_container_user.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/nav_header.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/chat_menu.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/drawer.xml" value="0.27447916666666666" />
-        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/navigation_menu.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/navigation_menu.xml" value="0.264" />
       </map>
     </option>
   </component>

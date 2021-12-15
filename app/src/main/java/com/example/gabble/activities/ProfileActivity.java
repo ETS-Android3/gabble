@@ -6,20 +6,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
-import com.example.gabble.MainActivity;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.gabble.R;
 
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.gabble.databinding.ActivityProfileBinding;
+import com.example.gabble.glide.GlideApp;
+import com.example.gabble.utilities.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,18 +38,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    ImageView profile_image;
-    EditText profile_name;
-    Button save_profile;
+    ActivityProfileBinding binding;
+
     private String name;
     private String mobileNo;
-    FloatingActionButton pickImage;
+    private String encodedImage;
+    private String about;
+    private Uri selectedImageUri;
     FirebaseFirestore db;
     DocumentReference documentReference;
 
@@ -51,52 +61,68 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-
-        profile_image = findViewById(R.id.profile_image);
-        profile_name = findViewById(R.id.profile_name);
-        save_profile = findViewById(R.id.save_profile);
-        pickImage = findViewById(R.id.updateImage);
+        binding = ActivityProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mobileNo = new SendOtp().getMobileNo();
         db = FirebaseFirestore.getInstance();
         documentReference = db.collection("users").document(mobileNo);
 
-        getProfileImage();
+        getSharedData();
+        setDiscardButton();
         setListeners();
     }
 
-    private void getProfileImage() {
-        StorageReference storageReference =
-                FirebaseStorage.getInstance().getReference("users/"+mobileNo+"/profile.jpg");
-        if(storageReference!=null) {
-            Toast.makeText(ProfileActivity.this, "fetched image", Toast.LENGTH_SHORT).show();
-            Glide.with(this)
-                    .load(storageReference)
-                    .into(profile_image);
+    private void getSharedData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,MODE_PRIVATE);
+        encodedImage = sharedPreferences.getString(Constants.KEY_IMAGE,null);
+        name = sharedPreferences.getString(Constants.KEY_NAME,"");
+        about = sharedPreferences.getString(Constants.KEY_ABOUT,Constants.DEFAULT_ABOUT);
+
+        if(encodedImage!=null) {
+            binding.profileImage.setImageBitmap(decodeImage(encodedImage));
+        } else {
+            binding.profileImage.setImageResource(R.drawable.ic_blank_profile);
+            encodedImage =
+                    convertImage(Uri.parse("android.resource://com.example.gabble/"+R.drawable.ic_blank_profile));
         }
 
+        if(!name.equals("")) {
+            binding.profileName.setText(name);
+        }
+
+        binding.profileAbout.setText(about);
+    }
+
+    private void setDiscardButton() {
+        if(getIntent().getStringExtra(Constants.COMING_FROM_WHICH_ACTIVITY).equals(Constants.OTP_ACTIVITY))
+            binding.profileDiscard.setVisibility(View.INVISIBLE);
     }
 
     private void setListeners() {
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                name = documentSnapshot.get("name").toString();
-                profile_name.setText(name);
+                try {
+                    name = documentSnapshot.get("name").toString();
+                    binding.profileName.setText(name);
+                } catch (Exception e) {
+
+                }
             }
         });
 
-        save_profile.setOnClickListener(new View.OnClickListener() {
+        binding.saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = profile_name.getText().toString();
+                name = binding.profileName.getText().toString();
+                about = binding.profileAbout.getText().toString();
                 updateDB();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
-        pickImage.setOnClickListener(new View.OnClickListener() {
+        binding.updateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -109,18 +135,27 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
+
+        binding.profileDiscard.setOnClickListener(v-> onBackPressed());
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
-            Uri selectedImageUri = data.getData();
-            if(selectedImageUri!=null) {
-                profile_image.setImageURI(selectedImageUri);
-                uploadImage(selectedImageUri);
-            }
+    private String convertImage(Uri imageUri) {
+        try {
+            Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+            ByteArrayOutputStream stream=new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            byte[] bytes=stream.toByteArray();
+            return Base64.encodeToString(bytes,Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.d("demo", "convertImage: "+e.getMessage());
         }
+        return null;
+    }
+
+    private Bitmap decodeImage(String sImage) {
+        byte[] bytes=Base64.decode(sImage,Base64.DEFAULT);
+        Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        return bitmap;
     }
 
     private void uploadImage(Uri imageUri) {
@@ -132,21 +167,38 @@ public class ProfileActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ProfileActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProfileActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(ProfileActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProfileActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            selectedImageUri = data.getData();
+            if(selectedImageUri!=null) {
+                binding.profileImage.setImageURI(selectedImageUri);
+                encodedImage = convertImage(selectedImageUri);
+                Log.d(Constants.TAG, "onActivityResult: "+encodedImage);
+            } else {
+
+            }
+        }
     }
 
     private void updateDB() {
         Map<String, String> user = new HashMap<>();
-        user.put("name",name);
-        db.collection("users").document(mobileNo).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+        user.put(Constants.KEY_NAME,name);
+        user.put(Constants.KEY_MOBILE,mobileNo);
+        user.put(Constants.KEY_IMAGE,encodedImage);
+        user.put(Constants.KEY_ABOUT,about);
+        db.collection(Constants.KEY_COLLECTION_USERS).document(mobileNo).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d("profile", "onSuccess: ");
@@ -159,26 +211,19 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public String getName() {
-        return name;
-    }
-
-    // if time left -> figure this out
-    public void setProfile_image() {
-        Random rand = new Random();
-        String url = "https://avatars.dicebear.com/api/open-peeps/"+rand.nextInt(1000)+".svg";
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("userdata",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,MODE_PRIVATE);
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
 
-        myEdit.putString("name",name);
-        myEdit.putString("mobile",mobileNo);
+        myEdit.putString(Constants.KEY_NAME,name);
+        myEdit.putString(Constants.KEY_MOBILE,mobileNo);
+        myEdit.putString(Constants.KEY_IMAGE,encodedImage);
+        myEdit.putString(Constants.KEY_ABOUT,about);
 
         myEdit.commit();
     }
+
 }

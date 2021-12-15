@@ -2,7 +2,29 @@ package com.example.gabble.utilities;
 
 public class Constants {
     public static final String KEY_COLLECTION_USERS = "users";
+    public static final String KEY_COLLECTION_CHAT = "chats";
+    public static final String KEY_COLLECTION_MESSAGES = "messages";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_MOBILE = "mobile";
+    public static final String KEY_ABOUT = "about";
+    public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
+    public static final String KEY_SENDER_MOBILE = "senderNo";
+    public static final String KEY_RECEIVER_MOBILE = "receiverNo";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_TIMESTAMP = "time";
+    public static final String SHARED_PREFERENCE_NAME = "userdata";
+    public static final String DEFAULT_ABOUT = "Hi there! I am using Gabble.";
+    public static final String COMING_FROM_WHICH_ACTIVITY = "coming from which Activity";
+    public static final String MAIN_ACTIVITY = "Main Activity";
+    public static final String OTP_ACTIVITY = "Otp Activity";
+    public static final String KEY_COLLECTION_CONVERSATIONS = "conversations";
+    public static final String KEY_SENDER_NAME = "senderName";
+    public static final String KEY_RECEIVER_NAME = "receiverName";
+    public static final String KEY_SENDER_IMAGE = "senderImage";
+    public static final String KEY_RECEIVER_IMAGE = "receiverImage";
+    public static final String KEY_LAST_MESSAGE = "lastMessage";
+
+    public static final String TAG = "demo";
 }

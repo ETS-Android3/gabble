@@ -6,32 +6,28 @@
     >
 
     <group android:checkableBehavior="single">
-    <item
-        android:id="@+id/action_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile"
-        app:showAsAction="never"
-        />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="Profile"
+            />
 
-    <item android:id="@+id/note"
-        android:icon="@drawable/ic_round_sticky_note_2_24"
-        android:title="Note to Self"
-        app:showAsAction="never"
-        />
+        <item android:id="@+id/nav_note"
+            android:icon="@drawable/ic_round_sticky_note_2_24"
+            android:title="Note to Self"
+            />
 
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_round_settings_24"
-        android:title="Settings"
-        app:showAsAction="never"
-        />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_round_settings_24"
+            android:title="Settings"
+            />
 
-    <item
-        android:title="Log out"
-        android:icon="@drawable/ic_baseline_power_settings_new_24"
-        android:id="@+id/logout"
-        app:showAsAction="never"
-        />
+        <item
+            android:title="Log out"
+            android:icon="@drawable/ic_baseline_power_settings_new_24"
+            android:id="@+id/nav_logout"
+            />
     </group>
 
 </menu>
