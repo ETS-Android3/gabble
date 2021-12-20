@@ -92,6 +92,56 @@ public class StoryActivity extends BaseActivity implements StoryListener {
     }
 
     /*
+    private void getStoriesTemp() {
+        loading(true);
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        List<Story> stories = new ArrayList<>();
+
+        database.collection(Constants.KEY_COLLECTION_USERS).get()
+                .addOnCompleteListener(task -> {
+                    loading(false);
+
+                    if(task.isSuccessful() && task.getResult()!=null) {
+
+                        for(QueryDocumentSnapshot i : task.getResult()) {
+                            Story story = new Story();
+                            story = getStoriesForUser(i.getId());
+
+                            if(story.storyContent.size()!=0) {
+                                stories.add(story);
+                            }
+                        }
+
+                    } else {
+                        showErrorMessage();
+                    }
+                });
+    }
+
+    private Story getStoriesForUser(String mobile) {
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        Story story = new Story();
+
+        database.collection(Constants.KEY_COLLECTION_STORIES).get()
+                .addOnCompleteListener(task -> {
+
+                    if(task.isSuccessful() && task.getResult()!=null) {
+
+                        for(QueryDocumentSnapshot i : task.getResult()) {
+                            if(i.getString(Constants.KEY_MOBILE).equals(mobile)) {
+
+                            }
+                        }
+
+                    } else {
+                        showErrorMessage();
+                    }
+
+                });
+    }get
+     */
+
+    /*
         This function checks whether 24 hrs have been elapsed since the story was posted.
      */
     private boolean checkStoryValidity(Date date) {
