@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
@@ -24,6 +26,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +58,7 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        EmojiManager.install(new GoogleEmojiProvider());
 
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
                 Context.MODE_PRIVATE);
@@ -69,7 +75,7 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        listenAvailabiltyOfUser();
+        listenAvailabilityOfUser();
     }
 
     private void init() {
@@ -164,7 +170,35 @@ public class ChatActivity extends BaseActivity {
         binding.imageBack.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
-        binding.layoutSend.setOnClickListener(v -> sendMessage());
+
+        binding.sendButton.setOnClickListener(v -> sendMessage());
+
+        // for Emoji keyboard
+        EmojiPopup popup =
+                EmojiPopup.Builder.fromRootView(binding.getRoot()).build(binding.inputMessage);
+        binding.layoutEmoji.setOnClickListener(v -> {
+            popup.toggle();
+        });
+
+        // for enabling/disabling attach button
+        binding.inputMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().equals("")) {
+                    binding.sendButton.setVisibility(View.GONE);
+                    binding.attachButton.setVisibility(View.VISIBLE);
+                } else {
+                    binding.sendButton.setVisibility(View.VISIBLE);
+                    binding.attachButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
     }
 
     private String getReadableDateTime(Date date) {
@@ -216,7 +250,7 @@ public class ChatActivity extends BaseActivity {
         }
     };
 
-    private void listenAvailabiltyOfUser() {
+    private void listenAvailabilityOfUser() {
         Log.d(Constants.TAG, "listenAvailabilityOfUser: I am here");
         database.collection(Constants.KEY_COLLECTION_USERS).document(
                 receiverUser.phoneNo
@@ -226,7 +260,7 @@ public class ChatActivity extends BaseActivity {
             }
             if(value!=null) {
                 if(value.getString(Constants.KEY_AVAILABILITY)!=null) {
-                    Log.d(Constants.TAG, "listenAvailabiltyOfUser: I am here");
+                    Log.d(Constants.TAG, "listenAvailabilityOfUser: I am here");
                     if(value.getString(Constants.KEY_AVAILABILITY).equals(Constants.KEY_ONLINE)) {
                         isReceiverOnline = true;
                     }
@@ -236,7 +270,7 @@ public class ChatActivity extends BaseActivity {
                 }
             }
             if(isReceiverOnline) {
-                Log.d(Constants.TAG, "listenAvailabiltyOfUser: I am here");
+                Log.d(Constants.TAG, "listenAvailabilityOfUser: I am here");
                 binding.textAvailability.setVisibility(View.VISIBLE);
             } else {
                 binding.textAvailability.setVisibility(View.GONE);

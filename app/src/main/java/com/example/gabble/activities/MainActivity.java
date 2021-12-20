@@ -2,7 +2,7 @@ package com.example.gabble.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,12 +14,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gabble.R;
 import com.example.gabble.adapters.RecentConversationsAdapter;
@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     TextView emptyChatTextView;
     RecyclerView conversationsRecyclerView;
     SharedPreferences sharedPreferences;
+    AppCompatImageView imageStoryActivity;
 
     private List<ChatMessage> conversations;
     private RecentConversationsAdapter conversationsAdapter;
@@ -65,6 +66,7 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         progressBar = findViewById(R.id.progressBar);
         emptyChatImageView = findViewById(R.id.empty_chat_image);
         emptyChatTextView = findViewById(R.id.empty_chat_message);
+        imageStoryActivity = findViewById(R.id.imageStoryActivity);
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
 
         init();
@@ -77,13 +79,12 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     private void init() {
         conversations = new ArrayList<>();
         conversationsAdapter = new RecentConversationsAdapter(conversations, this);
-        conversationsRecyclerView = findViewById(R.id.conversationsRecylerView);
+        conversationsRecyclerView = findViewById(R.id.conversationsRecyclerView);
         conversationsRecyclerView.setAdapter(conversationsAdapter);
         database = FirebaseFirestore.getInstance();
     }
 
     private void getProfileImage() {
-        Log.d("demo", "getProfileImage: " + encodedImage);
         if (encodedImage != null) {
             Log.d("demo", "getProfileImage: success");
             imageProfile.setImageBitmap(decodeImage(encodedImage));
@@ -195,6 +196,11 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         fab.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), UserActivity.class));
         });
+        // Easter egg-1
+        fab.setOnLongClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "\uD83D\uDC31", Toast.LENGTH_SHORT).show();
+            return true;
+        });
 
         // for opening drawer
         imageProfile = findViewById(R.id.imageProfile);
@@ -220,6 +226,11 @@ public class MainActivity extends BaseActivity implements ConversationListener {
 
                 return false;
             }
+        });
+
+        // for story activity
+        imageStoryActivity.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), StoryActivity.class));
         });
     }
 

@@ -6,16 +6,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_4sdp">
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:layout_width="@dimen/_25sdp"
-        android:layout_height="@dimen/_25sdp"
-        android:id="@+id/imageProfile"
-        android:background="@drawable/background_image"
-        app:layout_constraintStart_toStartOf="parent"
-        android:scaleType="centerCrop"
-        app:riv_oval="true"
-        app:layout_constraintBottom_toBottomOf="@id/textMessage"
-        />
+<!--    <com.makeramen.roundedimageview.RoundedImageView-->
+<!--        android:layout_width="@dimen/_25sdp"-->
+<!--        android:layout_height="@dimen/_25sdp"-->
+<!--        android:id="@+id/imageProfile"-->
+<!--        android:background="@drawable/background_image"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        app:riv_oval="true"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/textMessage"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/textMessage"
@@ -31,7 +31,7 @@
         app:layout_constraintWidth_max="wrap"
         android:textColor="@color/white"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintStart_toEndOf="@id/imageProfile"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.75"
         />

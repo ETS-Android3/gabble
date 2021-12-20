@@ -67,6 +67,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             return bitmap;
         }
-
     }
+
 }

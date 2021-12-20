@@ -18,12 +18,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gabble">
         <activity
+            android:name=".activities.CreateStoryActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Story"
+            />
+        <activity
             android:name=".activities.ChatActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.UserActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.StoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.StorySlidePagerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Story" />
         <activity
             android:name=".activities.SplashScreen"
             android:exported="true"

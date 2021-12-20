@@ -43,6 +43,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+// add comments describing what each function does
+
 public class ProfileActivity extends AppCompatActivity {
 
     ActivityProfileBinding binding;
@@ -52,8 +54,8 @@ public class ProfileActivity extends AppCompatActivity {
     private String encodedImage;
     private String about;
     private Uri selectedImageUri;
-    FirebaseFirestore db;
-    DocumentReference documentReference;
+    private FirebaseFirestore db;
+    private DocumentReference documentReference;
 
     public static final int PICK_IMAGE = 1;
     public static final int PIC_CROP = 2;

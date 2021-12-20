@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">Gabble</string>
     <string name="select_user">Select User</string>
+    <string name="story">Story</string>
     <string name="update_profile">Update Profile</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="online">online</string>
+    <string name="my_story">My Story</string>
+    <string name="type_a_status">Type a status</string>
+    <string name="type_a_message">Type a message</string>
+
 </resources>

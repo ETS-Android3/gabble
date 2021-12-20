@@ -1,0 +1,24 @@
+<!-- fragment_screen_slide_page.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_story_background">
+
+    <TextView
+        android:id="@+id/story_content_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_24sdp"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:hint="@string/type_a_status"
+        android:maxLength="100"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/input_background"
+        android:textSize="@dimen/_24ssp"
+        android:textStyle="bold" />
+
+</ScrollView>

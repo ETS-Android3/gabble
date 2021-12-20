@@ -25,6 +25,17 @@
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
     </style>
 
+    <style name="Theme.Story" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:statusBarColor">@color/default_story_background</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+<!--        <item name="android:windowFullscreen">true</item>-->
+<!--        <item name="android:fillViewport">true</item>-->
+<!--        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>-->
+    </style>
+
     <style name="profileImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">5%</item>

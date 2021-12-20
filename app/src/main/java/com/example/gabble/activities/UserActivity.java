@@ -37,7 +37,7 @@ public class UserActivity extends BaseActivity implements UserListener {
     private void getUsers() {
         loading(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
-        database.collection("users").get()
+        database.collection(Constants.KEY_COLLECTION_USERS).get()
                 .addOnCompleteListener(task -> {
                     loading(false);
                     String mobileNo = new SendOtp().getMobileNo();
@@ -48,9 +48,9 @@ public class UserActivity extends BaseActivity implements UserListener {
                                 continue;
                             }
                             User user = new User();
-                            user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                             user.about = queryDocumentSnapshot.getString(Constants.KEY_ABOUT);
                             user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
+                            user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
 
                             user.phoneNo = queryDocumentSnapshot.getId();
                             users.add(user);
