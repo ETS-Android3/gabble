@@ -71,6 +71,8 @@ public class RecentConversationsAdapter extends RecyclerView.Adapter<RecentConve
                 user.image = chatMessage.conversationImage;
                 conversationListener.onConversationClicked(user);
             });
+
+            
         }
 
         private Bitmap decodeImage(String sImage) {
