@@ -30,6 +30,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/_24ssp"
         android:textStyle="bold"
+        android:id="@+id/appName"
         app:layout_constraintBottom_toBottomOf="@id/imageProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +46,37 @@
         android:background="@drawable/background_icon"
         android:padding="@dimen/_6sdp"
         android:src="@drawable/ic_donut"
+        android:tint="@color/white"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/deleteChat"
+        android:layout_width="@dimen/_34sdp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginRight="@dimen/_16sdp"
+        android:background="@drawable/background_icon"
+        android:padding="@dimen/_6sdp"
+        android:visibility="gone"
+        android:src="@drawable/ic_delete"
+        android:tint="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/archiveChat"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/archiveChat"
+        android:layout_width="@dimen/_34sdp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginRight="@dimen/_16sdp"
+        android:background="@drawable/background_icon"
+        android:padding="@dimen/_6sdp"
+        android:visibility="gone"
+        android:src="@drawable/ic_round_archive_24"
         android:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -89,14 +121,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No conversations yet."
+            android:text="@string/no_conversations_yet"
             android:textColor="@color/compGreen"
             android:textStyle="bold"
             android:textSize="@dimen/_14sdp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_30sdp"
             android:id="@+id/empty_chat_message"
-            android:visibility="invisible"
+            android:visibility="gone"
             />
 
     </FrameLayout>

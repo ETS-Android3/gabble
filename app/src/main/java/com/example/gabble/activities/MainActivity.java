@@ -3,14 +3,18 @@ package com.example.gabble.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -29,6 +33,7 @@ import com.example.gabble.models.User;
 import com.example.gabble.utilities.Constants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -38,25 +43,35 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MainActivity extends BaseActivity implements ConversationListener {
 
-    FloatingActionButton fab;
-    RoundedImageView imageProfile;
-    DrawerLayout drawerLayout;
-    ProgressBar progressBar;
-    NavigationView navigationView;
-    ImageView emptyChatImageView;
-    TextView emptyChatTextView;
-    RecyclerView conversationsRecyclerView;
-    SharedPreferences sharedPreferences;
-    AppCompatImageView imageStoryActivity;
+    private FloatingActionButton fab;
+    private RoundedImageView imageProfile;
+    private DrawerLayout drawerLayout;
+    private ProgressBar progressBar;
+    private NavigationView navigationView;
+    private ImageView emptyChatImageView;
+    private TextView emptyChatTextView;
+    private RecyclerView conversationsRecyclerView;
+    private SharedPreferences sharedPreferences;
+    private AppCompatImageView imageStoryActivity;
+    private AppCompatImageView deleteChat;
+    private AppCompatImageView archiveChat;
+    private ItemTouchHelper itemTouchHelper;
+    private ChatMessage archivedChat = null;
+    private ChatMessage deletedChat = null;
 
     private List<ChatMessage> conversations;
     private RecentConversationsAdapter conversationsAdapter;
     private FirebaseFirestore database;
     private String name, mobile, encodedImage;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +82,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         emptyChatImageView = findViewById(R.id.empty_chat_image);
         emptyChatTextView = findViewById(R.id.empty_chat_message);
         imageStoryActivity = findViewById(R.id.imageStoryActivity);
+        deleteChat = findViewById(R.id.deleteChat);
+        archiveChat = findViewById(R.id.archiveChat);
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
 
         init();
@@ -76,12 +93,129 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         listenConversations();
     }
 
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            position = viewHolder.getAdapterPosition();
+
+            switch (direction) {
+                case ItemTouchHelper.LEFT:
+                    deletedChat = conversations.get(position);
+                    conversations.remove(position);
+                    conversationsAdapter.notifyItemRemoved(position);
+                    showUndoDeletedSnackBar();
+                    break;
+                case ItemTouchHelper.RIGHT:
+                    archivedChat = conversations.get(position);
+                    conversations.remove(position);
+                    conversationsAdapter.notifyItemRemoved(position);
+                    String archivedChatNo;
+                    if(archivedChat.receiverNo.equals(mobile)) {
+                        updateArchivedList(archivedChat.senderNo);
+                        archivedChatNo = archivedChat.senderNo;
+                    } else {
+                        updateArchivedList(archivedChat.receiverNo);
+                        archivedChatNo = archivedChat.receiverNo;
+                    }
+                    showUndoArchivedSnackBar(archivedChatNo);
+                    break;
+            }
+        }
+
+        private void showUndoDeletedSnackBar() {
+            Snackbar.make(conversationsRecyclerView,
+                    R.string.conversation_deleted,
+                    Snackbar.LENGTH_LONG)
+                    .setAnchorView(fab)
+                    .setAction(R.string.snackbar_label_undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+//                            deletedChat.(archivedMovies.lastIndexOf(movieName));
+                            conversations.add(position, deletedChat);
+                            conversationsAdapter.notifyItemInserted(position);
+                        }
+                    }).show();
+        }
+
+        private void showUndoArchivedSnackBar(String mobile) {
+            Snackbar.make(conversationsRecyclerView,
+                    R.string.conversation_archived,
+                    Snackbar.LENGTH_LONG)
+                    .setAnchorView(fab)
+                    .setAction(R.string.snackbar_label_undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                            Set<String> archivedChats =
+                                    sharedPreferences.getStringSet(Constants.KEY_ARCHIVED_CHATS,
+                                            new HashSet<String>());
+                            if(archivedChats.contains(mobile)) {
+                                archivedChats.remove(mobile);
+                                myEdit.remove(Constants.KEY_ARCHIVED_CHATS);
+                                myEdit.apply();
+                                myEdit.putStringSet(Constants.KEY_ARCHIVED_CHATS,archivedChats);
+                                myEdit.apply();
+                            }
+                            conversations.add(position, archivedChat);
+                            conversationsAdapter.notifyItemInserted(position);
+                        }
+                    }).show();
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this,
+                            R.color.error))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                    .addSwipeLeftLabel(getString(R.string.swipe_delete))
+                    .setSwipeLeftLabelColor(Color.WHITE)
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(MainActivity.this,
+                            R.color.compGreen))
+                    .addSwipeRightLabel(getString(R.string.swipe_archive))
+                    .addSwipeRightActionIcon(R.drawable.ic_archive)
+                    .setSwipeRightLabelColor(Color.WHITE)
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+        }
+    };
+
+    private void updateArchivedList(String mobile) {
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        Set<String> archivedChatNumbers =
+                sharedPreferences.getStringSet(Constants.KEY_ARCHIVED_CHATS,new HashSet<String>());
+
+        archivedChatNumbers.add(mobile);
+        myEdit.remove(Constants.KEY_ARCHIVED_CHATS);
+        myEdit.apply();
+        myEdit.putStringSet(Constants.KEY_ARCHIVED_CHATS,archivedChatNumbers);
+        myEdit.apply();
+
+        // debugging
+        for(String i : archivedChatNumbers) {
+            Log.d(Constants.TAG, "updateArchivedList: "+i);
+        }
+    }
+
     private void init() {
         conversations = new ArrayList<>();
+        itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        Set<String> archivedChats = sharedPreferences.getStringSet(Constants.KEY_ARCHIVED_CHATS,
+                new HashSet<String>());
         conversationsAdapter = new RecentConversationsAdapter(conversations, this);
         conversationsRecyclerView = findViewById(R.id.conversationsRecyclerView);
         conversationsRecyclerView.setAdapter(conversationsAdapter);
         database = FirebaseFirestore.getInstance();
+        itemTouchHelper.attachToRecyclerView(conversationsRecyclerView);
     }
 
     private void getProfileImage() {
@@ -109,53 +243,62 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     }
 
     private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
+        Set<String> archivedChatNumbers =
+                sharedPreferences.getStringSet(Constants.KEY_ARCHIVED_CHATS,new HashSet<String>());
+        //
         if (error != null) {
             return;
         }
         if (value != null) {
             for (DocumentChange documentChange : value.getDocumentChanges()) {
-                if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                    String senderNo =
-                            documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
-                    String receiverNo =
-                            documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
-                    ChatMessage chatMessage = new ChatMessage();
-                    chatMessage.senderNo = senderNo;
-                    chatMessage.receiverNo = receiverNo;
-                    if (sharedPreferences.getString(Constants.KEY_MOBILE, "").equals(senderNo)) {
-                        chatMessage.conversationId =
-                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
-                        chatMessage.conversationName =
-                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
-                        chatMessage.conversationImage =
-                                documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
-                    } else {
-                        chatMessage.conversationName =
-                                documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
-                        chatMessage.conversationId =
-                                documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
-                        chatMessage.conversationImage =
-                                documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
-                    }
-                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE
-                    );
-                    chatMessage.dateObject =
-                            documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
-                    conversations.add(chatMessage);
-                } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
-                    for (int i = 0; i < conversations.size(); i++) {
+                if(archivedChatNumbers.contains(documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE))
+                || archivedChatNumbers.contains(documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE)) ) {
+                    // means the chat has been archived
+                } else {
+                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
                         String senderNo =
                                 documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
                         String receiverNo =
                                 documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
-                        if (conversations.get(i).senderNo.equals(senderNo) && conversations.get(i).receiverNo.equals(receiverNo)) {
-                            conversations.get(i).message =
-                                    documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
-                            conversations.get(i).dateObject =
-                                    documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
-                            break;
+                        ChatMessage chatMessage = new ChatMessage();
+                        chatMessage.senderNo = senderNo;
+                        chatMessage.receiverNo = receiverNo;
+                        if (sharedPreferences.getString(Constants.KEY_MOBILE, "").equals(senderNo)) {
+                            chatMessage.conversationId =
+                                    documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
+                            chatMessage.conversationName =
+                                    documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
+                            chatMessage.conversationImage =
+                                    documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
+                        } else {
+                            chatMessage.conversationName =
+                                    documentChange.getDocument().getString(Constants.KEY_SENDER_NAME);
+                            chatMessage.conversationId =
+                                    documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
+                            chatMessage.conversationImage =
+                                    documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
+                        }
+                        chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE
+                        );
+                        chatMessage.dateObject =
+                                documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                        conversations.add(chatMessage);
+                    } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
+                        for (int i = 0; i < conversations.size(); i++) {
+                            String senderNo =
+                                    documentChange.getDocument().getString(Constants.KEY_SENDER_MOBILE);
+                            String receiverNo =
+                                    documentChange.getDocument().getString(Constants.KEY_RECEIVER_MOBILE);
+                            if (conversations.get(i).senderNo.equals(senderNo) && conversations.get(i).receiverNo.equals(receiverNo)) {
+                                conversations.get(i).message =
+                                        documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
+                                conversations.get(i).dateObject =
+                                        documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                                break;
+                            }
                         }
                     }
+                    //
                 }
             }
             Collections.sort(conversations, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
@@ -222,6 +365,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                 } else if (id == R.id.nav_logout) {
                     FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(getApplicationContext(), SendOtp.class));
+                } else if (id == R.id.nav_archive) {
+                    startActivity(new Intent(getApplicationContext(), ArchivedChatActivity.class));
                 }
 
                 return false;

@@ -45,5 +45,7 @@ public class Constants {
     public static final String STORY_FONT_FUZZY = "fuzzy";
     public static final String STORY_FONT_DEFAULT = "default";
 
+    public static final String KEY_ARCHIVED_CHATS = "archived chats";
+
     public static final String TAG = "demo";
 }

@@ -76,4 +76,7 @@ dependencies {
 
     // slidr activity
     implementation 'com.r0adkll:slidableactivity:2.1.0'
+
+    // Swipe decorator
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 }

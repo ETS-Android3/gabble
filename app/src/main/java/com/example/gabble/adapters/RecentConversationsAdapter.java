@@ -1,5 +1,7 @@
 package com.example.gabble.adapters;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -13,15 +15,18 @@ import com.example.gabble.databinding.ItemContainerRecentConversationBinding;
 import com.example.gabble.listeners.ConversationListener;
 import com.example.gabble.models.ChatMessage;
 import com.example.gabble.models.User;
+import com.example.gabble.utilities.Constants;
 
 import java.util.List;
+import java.util.Set;
 
 public class RecentConversationsAdapter extends RecyclerView.Adapter<RecentConversationsAdapter.ConversationViewHolder>{
 
     private final List<ChatMessage> chatMessages;
     private final ConversationListener conversationListener;
 
-    public RecentConversationsAdapter(List<ChatMessage> chatMessages,ConversationListener conversationListener) {
+    public RecentConversationsAdapter(List<ChatMessage> chatMessages,
+                                      ConversationListener conversationListener) {
         this.chatMessages = chatMessages;
         this.conversationListener = conversationListener;
     }
@@ -40,7 +45,14 @@ public class RecentConversationsAdapter extends RecyclerView.Adapter<RecentConve
 
     @Override
     public void onBindViewHolder(@NonNull ConversationViewHolder holder, int position) {
-        holder.setData(chatMessages.get(position));
+//        if(archivedNumbers!=null) {
+//            if(!archivedNumbers.contains(chatMessages.get(position).receiverNo)) {
+//                holder.setData(chatMessages.get(position));
+//            }
+//        } else {
+            holder.setData(chatMessages.get(position));
+//        }
+
     }
 
     @Override
@@ -71,8 +83,6 @@ public class RecentConversationsAdapter extends RecyclerView.Adapter<RecentConve
                 user.image = chatMessage.conversationImage;
                 conversationListener.onConversationClicked(user);
             });
-
-            
         }
 
         private Bitmap decodeImage(String sImage) {
