@@ -28,6 +28,7 @@ import com.example.gabble.databinding.ActivityUserBinding;
 import com.example.gabble.models.ChatMessage;
 import com.example.gabble.models.User;
 import com.example.gabble.utilities.Constants;
+import com.example.gabble.utilities.GetUserInformation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -182,6 +183,18 @@ public class ChatActivity extends BaseActivity {
 
     private void loadReceiverDetails() {
         receiverUser = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
+
+        // arrangement for QR activity
+        if(receiverUser==null) {
+            receiverUser = new User();
+            String mobile = getIntent().getStringExtra(Constants.KEY_MOBILE);
+            GetUserInformation getUserInformation = new GetUserInformation(mobile);
+            receiverUser.phoneNo = mobile;
+            receiverUser.name = getUserInformation.getName();
+            receiverUser.image = getUserInformation.getImage();
+            receiverUser.about = getUserInformation.getImage();
+        }
+
         binding.textName.setText(receiverUser.name);
     }
 

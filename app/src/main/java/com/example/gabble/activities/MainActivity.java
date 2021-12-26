@@ -1,5 +1,6 @@
 package com.example.gabble.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -46,6 +47,9 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
@@ -388,6 +392,10 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                     startActivity(new Intent(getApplicationContext(), SendOtp.class));
                 } else if (id == R.id.nav_archive) {
                     startActivity(new Intent(getApplicationContext(), ArchivedChatActivity.class));
+                } else if (id == R.id.nav_my_qr_code) {
+                    startActivity(new Intent(getApplicationContext(), MyQrActivity.class));
+                } else if (id == R.id.nav_scan_qr_code) {
+                    scanQrCode();
                 }
 
                 return false;
@@ -424,5 +432,26 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         TextView nav_profile_mobile = findViewById(R.id.nav_profile_mobile);
         nav_profile_mobile.setText(mobile);
     }
+
+    private void scanQrCode() {
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        options.setPrompt("Scan a Qr Code");
+        options.setBarcodeImageEnabled(true);
+        options.setOrientationLocked(false);
+        options.setBeepEnabled(false);
+        barcodeLauncher.launch(options);
+    }
+
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if(result.getContents() == null) {
+                    Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                    intent.putExtra(Constants.KEY_MOBILE,result.getContents());
+                    startActivity(intent);
+                }
+            });
 }
 

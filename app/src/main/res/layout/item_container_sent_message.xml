@@ -24,8 +24,10 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageMessage"
-        android:layout_width="@dimen/_150sdp"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_max="@dimen/_150sdp"
+        app:layout_constraintHeight_max="@dimen/_150sdp"
         android:scaleType="fitCenter"
         android:layout_marginLeft="@dimen/_4sdp"
         android:background="@drawable/background_sent_message"
@@ -33,7 +35,6 @@
         android:paddingBottom="@dimen/_8sdp"
         android:paddingStart="@dimen/_12sdp"
         android:paddingEnd="@dimen/_12sdp"
-        app:layout_constraintWidth_max="wrap"
         android:textColor="@color/black"
         android:textSize="@dimen/_13ssp"
         android:src="@drawable/ferb"
