@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gabble">
         <activity
+            android:name=".activities.ContactsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.MyQrActivity"
             android:exported="false" />
         <activity
@@ -77,8 +80,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            tools:replace="screenOrientation"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
 
         <service
             android:name=".firebase.MessagingService"

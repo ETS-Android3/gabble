@@ -5,17 +5,25 @@ import static android.app.PendingIntent.getActivity;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,6 +39,7 @@ import com.example.gabble.adapters.ChatAdapter;
 import com.example.gabble.databinding.ActivityChatBinding;
 import com.example.gabble.databinding.ActivityUserBinding;
 import com.example.gabble.models.ChatMessage;
+import com.example.gabble.models.Contact;
 import com.example.gabble.models.User;
 import com.example.gabble.utilities.Constants;
 import com.example.gabble.utilities.GetUserInformation;
@@ -73,7 +82,7 @@ public class ChatActivity extends BaseActivity {
     private String messageType = null;
 
     // constants
-    public static final int PICK_IMAGE = 1;
+    private static final int PICK_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +117,11 @@ public class ChatActivity extends BaseActivity {
         database = FirebaseFirestore.getInstance();
         documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
                 .document(senderMobileNo);
+        
+        // for contact message
+        if(getIntent().getStringExtra(Constants.KEY_CONTACT_MESSAGE)!=null) {
+            binding.inputMessage.setText(getIntent().getStringExtra(Constants.KEY_CONTACT_MESSAGE));
+        }
     }
 
     private void sendMessage() {
@@ -271,6 +285,7 @@ public class ChatActivity extends BaseActivity {
                 }
             }
         });
+
     }
 
     // For choosing images, videos, location, contacts, documents
@@ -291,6 +306,9 @@ public class ChatActivity extends BaseActivity {
                     case 2:
                         break; // doc
                     case 3:
+                        Intent intent = new Intent(ChatActivity.this,ContactsActivity.class);
+                        intent.putExtra(Constants.KEY_USER,receiverUser);
+                        startActivity(intent);
                         break; // contacts
                     case 4:
                         break; // location
@@ -478,4 +496,6 @@ public class ChatActivity extends BaseActivity {
         super.onBackPressed();
         startActivity(new Intent(getApplicationContext(),MainActivity.class));
     }
+
+
 }

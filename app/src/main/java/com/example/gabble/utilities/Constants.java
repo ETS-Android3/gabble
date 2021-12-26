@@ -22,6 +22,7 @@ public class Constants {
     public static final String KEY_TYPE_IMAGE = "image";
     public static final String KEY_TYPE_TEXT = "text";
     public static final String KEY_TYPING = "typing";
+    public static final String KEY_CONTACT_MESSAGE = "contact message";
 
     public static final String SHARED_PREFERENCE_NAME = "userdata";
     public static final String DEFAULT_ABOUT = "Hi there! I am using Gabble.";

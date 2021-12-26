@@ -3,9 +3,13 @@ package com.example.gabble.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -57,8 +61,9 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private DocumentReference documentReference;
 
+    // constants
     public static final int PICK_IMAGE = 1;
-    public static final int PIC_CROP = 2;
+    private static final int PERMISSION_ALL = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +75,22 @@ public class ProfileActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         documentReference = db.collection(Constants.KEY_COLLECTION_USERS).document(mobileNo);
 
+        checkPermissions();
         getSharedData();
         setDiscardButton();
         setListeners();
+    }
+
+    private void checkPermissions() {
+        String[] permissions = {
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        };
+
+        if(!hasPermissions(permissions,PERMISSION_ALL)) {
+            ActivityCompat.requestPermissions(ProfileActivity.this,permissions,PERMISSION_ALL);
+        }
     }
 
     private void getSharedData() {
@@ -232,4 +250,19 @@ public class ProfileActivity extends AppCompatActivity {
         myEdit.commit();
     }
 
+    public boolean hasPermissions(String permissions[], int requestCode)
+    {
+        for(String s : permissions) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), s) == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
 }
