@@ -41,6 +41,7 @@
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_story_slide.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/activity_user.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/app_bar_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/attach_file_dialog.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/clone.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/content_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/layout/fragment_story_slide_page.xml" value="0.27447916666666666" />
@@ -54,6 +55,8 @@
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/chat_menu.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/drawer.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/menu/navigation_menu.xml" value="0.264" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/mipmap-anydpi-v26/ic_cat_launcher.xml" value="0.15989583333333332" />
+        <entry key="..\:/Users/gargg/AndroidStudioProjects/gabble/app/src/main/res/mipmap-anydpi-v26/ic_cat_launcher_round.xml" value="0.15989583333333332" />
       </map>
     </option>
   </component>

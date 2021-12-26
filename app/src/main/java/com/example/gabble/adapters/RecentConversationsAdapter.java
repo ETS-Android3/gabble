@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -45,14 +46,7 @@ public class RecentConversationsAdapter extends RecyclerView.Adapter<RecentConve
 
     @Override
     public void onBindViewHolder(@NonNull ConversationViewHolder holder, int position) {
-//        if(archivedNumbers!=null) {
-//            if(!archivedNumbers.contains(chatMessages.get(position).receiverNo)) {
-//                holder.setData(chatMessages.get(position));
-//            }
-//        } else {
             holder.setData(chatMessages.get(position));
-//        }
-
     }
 
     @Override
@@ -70,8 +64,17 @@ public class RecentConversationsAdapter extends RecyclerView.Adapter<RecentConve
 
         void setData(ChatMessage chatMessage) {
             binding.textName.setText(chatMessage.conversationName);
-            binding.textRecentMessage.setText(chatMessage.message);
 
+            // for recent message
+            if(chatMessage.messageType!=null) {
+                if(chatMessage.messageType.equals(Constants.KEY_TYPE_TEXT)) {
+                    binding.textRecentMessage.setText(chatMessage.message);
+                } else if(chatMessage.messageType.equals(Constants.KEY_TYPE_IMAGE)) {
+                    binding.textRecentMessage.setText(Constants.KEY_IMAGE);
+                }
+            }
+
+            // for profile image
             if(chatMessage.conversationImage!=null) {
                 binding.imageProfile.setImageBitmap(decodeImage(chatMessage.conversationImage));
             }

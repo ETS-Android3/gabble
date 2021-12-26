@@ -15,6 +15,10 @@
     <color name="beige">#e8c29d</color>
     <color name="onlineGreen">#008000</color>
     <color name="default_story_background">#34B7F1</color>
+    <color name="chat_dark_blue">#4267B2</color>
+    <color name="chat_light_blue">#00B2FF</color>
+    <color name="chat_grey_2">#898F9C</color>
+    <color name="chat_grey">#5996989C</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

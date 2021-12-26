@@ -1,6 +1,7 @@
 package com.example.gabble.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
@@ -9,13 +10,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,12 +30,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.gabble.R;
 import com.example.gabble.adapters.RecentConversationsAdapter;
 import com.example.gabble.listeners.ConversationListener;
 import com.example.gabble.models.ChatMessage;
 import com.example.gabble.models.User;
 import com.example.gabble.utilities.Constants;
+import com.example.gabble.utilities.ImageConverter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -73,6 +80,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     private String name, mobile, encodedImage;
     private int position;
 
+    private Vibrator vibrator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +94,7 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         deleteChat = findViewById(R.id.deleteChat);
         archiveChat = findViewById(R.id.archiveChat);
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, MODE_PRIVATE);
+        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         init();
         getSharedValues();
@@ -103,14 +113,10 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             position = viewHolder.getAdapterPosition();
+            produceVibration();
 
             switch (direction) {
                 case ItemTouchHelper.LEFT:
-                    deletedChat = conversations.get(position);
-                    conversations.remove(position);
-                    conversationsAdapter.notifyItemRemoved(position);
-                    showUndoDeletedSnackBar();
-                    break;
                 case ItemTouchHelper.RIGHT:
                     archivedChat = conversations.get(position);
                     conversations.remove(position);
@@ -173,9 +179,9 @@ public class MainActivity extends BaseActivity implements ConversationListener {
 
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this,
-                            R.color.error))
-                    .addSwipeLeftActionIcon(R.drawable.ic_delete)
-                    .addSwipeLeftLabel(getString(R.string.swipe_delete))
+                            R.color.compGreen))
+                    .addSwipeLeftActionIcon(R.drawable.ic_archive)
+                    .addSwipeLeftLabel(getString(R.string.swipe_archive))
                     .setSwipeLeftLabelColor(Color.WHITE)
                     .addSwipeRightBackgroundColor(ContextCompat.getColor(MainActivity.this,
                             R.color.compGreen))
@@ -188,6 +194,16 @@ public class MainActivity extends BaseActivity implements ConversationListener {
 
         }
     };
+
+    private void produceVibration() {
+        final VibrationEffect vibrationEffect1;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            vibrationEffect1 = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK);
+            vibrator.cancel();
+            vibrator.vibrate(vibrationEffect1);
+        }
+    }
 
     private void updateArchivedList(String mobile) {
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
@@ -221,7 +237,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     private void getProfileImage() {
         if (encodedImage != null) {
             Log.d("demo", "getProfileImage: success");
-            imageProfile.setImageBitmap(decodeImage(encodedImage));
+//            imageProfile.setImageBitmap(decodeImage(encodedImage));
+            new ImageConverter().loadEncodedImage(getApplicationContext(),encodedImage,imageProfile);
         }
     }
 
@@ -282,6 +299,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                         );
                         chatMessage.dateObject =
                                 documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                        chatMessage.messageType =
+                                documentChange.getDocument().getString(Constants.KEY_MESSAGE_TYPE);
                         conversations.add(chatMessage);
                     } else if (documentChange.getType() == DocumentChange.Type.MODIFIED) {
                         for (int i = 0; i < conversations.size(); i++) {
@@ -294,6 +313,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
                                         documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                                 conversations.get(i).dateObject =
                                         documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                                conversations.get(i).messageType =
+                                        documentChange.getDocument().getString(Constants.KEY_MESSAGE_TYPE);
                                 break;
                             }
                         }
@@ -394,7 +415,8 @@ public class MainActivity extends BaseActivity implements ConversationListener {
 
     private void updateNavHeader() {
         RoundedImageView nav_profile_image = findViewById(R.id.nav_profile_image);
-        nav_profile_image.setImageBitmap(decodeImage(encodedImage));
+//        nav_profile_image.setImageBitmap(decodeImage(encodedImage));
+        new ImageConverter().loadEncodedImage(getApplicationContext(),encodedImage,nav_profile_image);
 
         TextView nav_profile_name = findViewById(R.id.nav_profile_name);
         nav_profile_name.setText(name);

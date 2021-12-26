@@ -149,7 +149,7 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
             ByteArrayOutputStream stream=new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream);
             byte[] bytes=stream.toByteArray();
             return Base64.encodeToString(bytes,Base64.DEFAULT);
         } catch (Exception e) {

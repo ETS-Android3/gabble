@@ -1,16 +1,25 @@
 package com.example.gabble.activities;
 
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.gabble.R;
 import com.example.gabble.adapters.ChatAdapter;
@@ -30,6 +39,7 @@ import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +62,10 @@ public class ChatActivity extends BaseActivity {
     private String senderImage;
     private String conversationId = null;
     private boolean isReceiverOnline = false;
+    private String messageType = null;
+
+    // constants
+    public static final int PICK_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +105,9 @@ public class ChatActivity extends BaseActivity {
         message.put(Constants.KEY_RECEIVER_MOBILE, receiverUser.phoneNo);
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP, new Date());
+        message.put(Constants.KEY_MESSAGE_TYPE,Constants.KEY_TYPE_TEXT);
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+        messageType = Constants.KEY_TYPE_TEXT;
 
         if (conversationId != null) {
             updateConversation(binding.inputMessage.getText().toString());
@@ -105,6 +121,7 @@ public class ChatActivity extends BaseActivity {
             conversation.put(Constants.KEY_SENDER_MOBILE, senderMobileNo);
             conversation.put(Constants.KEY_SENDER_IMAGE,
                     sharedPreferences.getString(Constants.KEY_IMAGE, null));
+            conversation.put(Constants.KEY_MESSAGE_TYPE,Constants.KEY_TYPE_TEXT);
             conversation.put(Constants.KEY_RECEIVER_NAME, receiverUser.name);
             conversation.put(Constants.KEY_LAST_MESSAGE, binding.inputMessage.getText().toString());
             conversation.put(Constants.KEY_TIMESTAMP, new Date());
@@ -141,6 +158,8 @@ public class ChatActivity extends BaseActivity {
                     chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
                     chatMessage.dateTime =
                             getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
+                    chatMessage.messageType =
+                            documentChange.getDocument().getString(Constants.KEY_MESSAGE_TYPE);
                     chatMessage.dateObject =
                             documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                     chatMessages.add(chatMessage);
@@ -199,6 +218,106 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) { }
         });
+
+        // for attach button
+        binding.attachButton.setOnClickListener(v-> {
+            showAlertBox();
+        });
+    }
+
+    // For choosing images, videos, location, contacts, documents
+    private void showAlertBox() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose File type");
+
+        String[] types = {"Image","Video","Document","Contacts","Location"};
+        builder.setItems(types, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        getImage();
+                        break;
+                    case 1:
+                        break; // video
+                    case 2:
+                        break; // doc
+                    case 3:
+                        break; // contacts
+                    case 4:
+                        break; // location
+                }
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void getImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+    }
+
+    private void sendImageMessage(String encodedImage) {
+        HashMap<String, Object> message = new HashMap<>();
+        message.put(Constants.KEY_SENDER_MOBILE, senderMobileNo);
+        message.put(Constants.KEY_RECEIVER_MOBILE, receiverUser.phoneNo);
+        message.put(Constants.KEY_MESSAGE, encodedImage);
+        message.put(Constants.KEY_MESSAGE_TYPE,Constants.KEY_TYPE_IMAGE);
+        message.put(Constants.KEY_TIMESTAMP, new Date());
+        database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+        messageType = Constants.KEY_TYPE_IMAGE;
+
+        if (conversationId != null) {
+            updateConversation(encodedImage);
+        } else {
+            HashMap<String, Object> conversation = new HashMap<>();
+            conversation.put(Constants.KEY_RECEIVER_MOBILE, receiverUser.phoneNo);
+            conversation.put(Constants.KEY_RECEIVER_IMAGE, receiverUser.image);
+            conversation.put(Constants.KEY_SENDER_NAME,
+                    sharedPreferences.getString(Constants.KEY_NAME, ""));
+            conversation.put(Constants.KEY_SENDER_MOBILE, senderMobileNo);
+            conversation.put(Constants.KEY_SENDER_IMAGE,
+                    sharedPreferences.getString(Constants.KEY_IMAGE, null));
+            conversation.put(Constants.KEY_RECEIVER_NAME, receiverUser.name);
+            conversation.put(Constants.KEY_LAST_MESSAGE, encodedImage);
+            conversation.put(Constants.KEY_TIMESTAMP, new Date());
+            conversation.put(Constants.KEY_MESSAGE_TYPE,Constants.KEY_TYPE_IMAGE);
+            addConversation(conversation);
+        }
+
+        binding.inputMessage.setText(null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            Uri selectedImageUri = data.getData();
+            if(selectedImageUri!=null) {
+                String encodedImage = convertImage(selectedImageUri);
+                sendImageMessage(encodedImage);
+            } else {
+                // make toast
+            }
+        }
+    }
+
+    private String convertImage(Uri imageUri) {
+        try {
+            Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
+            ByteArrayOutputStream stream=new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream);
+            byte[] bytes=stream.toByteArray();
+            return Base64.encodeToString(bytes,Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.d("demo", "convertImage: "+e.getMessage());
+        }
+        return null;
     }
 
     private String getReadableDateTime(Date date) {
@@ -219,7 +338,8 @@ public class ChatActivity extends BaseActivity {
                 new Date(),Constants.KEY_SENDER_NAME,senderName,Constants.KEY_SENDER_MOBILE,
                 senderMobileNo,Constants.KEY_SENDER_IMAGE,senderImage,
                 Constants.KEY_RECEIVER_MOBILE,receiverUser.phoneNo,Constants.KEY_RECEIVER_NAME,
-                receiverUser.name,Constants.KEY_RECEIVER_IMAGE,receiverUser.image);
+                receiverUser.name,Constants.KEY_RECEIVER_IMAGE,receiverUser.image,
+                Constants.KEY_MESSAGE_TYPE,messageType);
     }
 
     private void checkForConversation() {

@@ -18,6 +18,9 @@ public class Constants {
     public static final String KEY_RECEIVER_MOBILE = "receiverNo";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_TIMESTAMP = "time";
+    public static final String KEY_MESSAGE_TYPE = "Message Type";
+    public static final String KEY_TYPE_IMAGE = "image";
+    public static final String KEY_TYPE_TEXT = "text";
 
     public static final String SHARED_PREFERENCE_NAME = "userdata";
     public static final String DEFAULT_ABOUT = "Hi there! I am using Gabble.";

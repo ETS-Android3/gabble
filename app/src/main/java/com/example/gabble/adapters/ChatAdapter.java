@@ -1,5 +1,10 @@
 package com.example.gabble.adapters;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,9 +12,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.gabble.databinding.ItemContainerReceivedMessageBinding;
 import com.example.gabble.databinding.ItemContainerSentMessageBinding;
+import com.example.gabble.glide.GlideApp;
 import com.example.gabble.models.ChatMessage;
+import com.example.gabble.utilities.Constants;
+import com.example.gabble.utilities.ImageConverter;
 
 import java.util.List;
 
@@ -81,10 +90,23 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
 
             void setData(ChatMessage chatMessage) {
-                binding.textMessage.setText(chatMessage.message);
+                Log.d(Constants.TAG, "setData: "+chatMessage.messageType);
+
+                if(chatMessage.messageType!=null) {
+                    if (chatMessage.messageType.equals(Constants.KEY_TYPE_IMAGE)) {
+                        binding.textMessage.setVisibility(View.GONE);
+                        binding.imageMessage.setVisibility(View.VISIBLE);
+                        new ImageConverter().loadEncodedImage(itemView.getContext(), chatMessage.message,
+                                binding.imageMessage);
+                    } else {
+                        binding.textMessage.setVisibility(View.VISIBLE);
+                        binding.imageMessage.setVisibility(View.GONE);
+                        binding.textMessage.setText(chatMessage.message);
+                    }
+                }
+
                 binding.textDateTime.setText(chatMessage.dateTime);
             }
-
     }
 
     static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
@@ -97,7 +119,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         void setData(ChatMessage chatMessage) {
-            binding.textMessage.setText(chatMessage.message);
+
+            if(chatMessage.messageType!=null) {
+                if (chatMessage.messageType.equals(Constants.KEY_TYPE_IMAGE)) {
+                    binding.imageMessage.setVisibility(View.VISIBLE);
+                    binding.textMessage.setVisibility(View.GONE);
+                    binding.imageMessage.setImageBitmap(new ImageConverter().decodeImage(chatMessage.message));
+                } else {
+                    binding.textMessage.setVisibility(View.VISIBLE);
+                    binding.imageMessage.setVisibility(View.GONE);
+                    binding.textMessage.setText(chatMessage.message);
+                }
+            }
+
             binding.textDateTime.setText(chatMessage.dateTime);
         }
 
