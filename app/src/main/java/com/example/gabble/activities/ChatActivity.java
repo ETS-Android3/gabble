@@ -1,5 +1,7 @@
 package com.example.gabble.activities;
 
+import static android.app.PendingIntent.getActivity;
+
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +22,8 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.example.gabble.R;
@@ -57,12 +62,14 @@ public class ChatActivity extends BaseActivity {
     private List<ChatMessage> chatMessages;
     private ChatAdapter chatAdapter;
     private FirebaseFirestore database;
+    private DocumentReference documentReference;
     private SharedPreferences sharedPreferences;
     private String senderMobileNo;
     private String senderName;
     private String senderImage;
     private String conversationId = null;
     private boolean isReceiverOnline = false;
+    private boolean isReceiverTyping = false;
     private String messageType = null;
 
     // constants
@@ -91,6 +98,7 @@ public class ChatActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         listenAvailabilityOfUser();
+        listenTypingOfUser();
     }
 
     private void init() {
@@ -98,6 +106,8 @@ public class ChatActivity extends BaseActivity {
         chatAdapter = new ChatAdapter(chatMessages, senderMobileNo);
         binding.chatRecylerView.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
+        documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(senderMobileNo);
     }
 
     private void sendMessage() {
@@ -203,7 +213,10 @@ public class ChatActivity extends BaseActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         });
 
-        binding.sendButton.setOnClickListener(v -> sendMessage());
+        binding.sendButton.setOnClickListener(v -> {
+            sendMessage();
+            documentReference.update(Constants.KEY_TYPING,false);
+        });
 
         // for Emoji keyboard
         EmojiPopup popup =
@@ -214,11 +227,15 @@ public class ChatActivity extends BaseActivity {
 
         // for enabling/disabling attach button
         binding.inputMessage.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                documentReference.update(Constants.KEY_TYPING,true);
                 if(s.toString().equals("")) {
                     binding.sendButton.setVisibility(View.GONE);
                     binding.attachButton.setVisibility(View.VISIBLE);
@@ -229,12 +246,30 @@ public class ChatActivity extends BaseActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
         // for attach button
         binding.attachButton.setOnClickListener(v-> {
             showAlertBox();
+        });
+
+        // for typing purpose
+        binding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                binding.getRoot().getWindowVisibleDisplayFrame(r);
+                int screenHeight = binding.getRoot().getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+                if (keypadHeight > screenHeight * 0.15) {
+
+                } else {
+                    documentReference.update(Constants.KEY_TYPING,false);
+                }
+            }
         });
     }
 
@@ -412,4 +447,35 @@ public class ChatActivity extends BaseActivity {
         });
     }
 
+    private void listenTypingOfUser() {
+        database.collection(Constants.KEY_COLLECTION_USERS).document(
+                receiverUser.phoneNo
+        ).addSnapshotListener(ChatActivity.this, (value, error) -> {
+            if(error!=null) {
+                return;
+            }
+            if(value!=null) {
+                if(value.getBoolean(Constants.KEY_TYPING)!=null) {
+                    if(value.getBoolean(Constants.KEY_TYPING)) {
+                        isReceiverTyping = true;
+                    }
+                    else {
+                        isReceiverTyping = false;
+                    }
+                }
+            }
+            if(isReceiverTyping) {
+                binding.textAvailability.setText("typing...");
+            } else {
+                binding.textAvailability.setText(R.string.online);
+            }
+
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
 }

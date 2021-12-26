@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_max="@dimen/_150sdp"
         app:layout_constraintHeight_max="@dimen/_150sdp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:layout_marginLeft="@dimen/_4sdp"
         android:background="@drawable/background_sent_message"
         android:paddingTop="@dimen/_8sdp"
