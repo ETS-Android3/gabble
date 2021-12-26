@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".activities.ProfileActivity">
+    tools:context=".activities.ReceiverProfileActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/profileDiscard"
@@ -14,7 +14,7 @@
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginLeft="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_12sdp"
-        android:src="@drawable/ic_round_close_24"
+        android:src="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/background_icon"
@@ -26,7 +26,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/update_profile"
+        android:text="@string/user_profile"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@+id/profileDiscard"
@@ -72,22 +72,9 @@
                         android:scaleType="centerCrop"
                         />
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/updateImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/primary"
-                        android:src="@drawable/ic_camera"
-                        android:tint="@color/white"
-                        app:tint="@color/white"
-                        android:layout_gravity="bottom"
-                        android:layout_marginStart="@dimen/_130sdp"
-                        app:borderWidth="0dp"
-                        />
-
                 </FrameLayout>
 
-                <EditText
+                <TextView
                     android:id="@+id/profile_name"
                     android:layout_marginTop="40dp"
                     android:layout_width="250dp"
@@ -95,27 +82,32 @@
                     android:imeOptions="actionNext"
                     android:maxLength="20"
                     android:inputType="text"
+                    android:textColor="@color/black"
                     android:layout_height="40dp"
                     android:background="@drawable/bgbox_2"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     />
 
-                <EditText
+                <TextView
                     android:id="@+id/profile_about"
                     android:layout_marginTop="40dp"
                     android:layout_width="@dimen/_260sdp"
                     android:hint="@string/about"
+                    android:textColor="@color/black"
                     android:imeOptions="actionDone"
                     android:maxLength="120"
                     android:layout_height="@dimen/_100sdp"
                     android:background="@drawable/bgbox_2"
                     android:textAlignment="center"
                     android:textSize="20sp"
+                    android:gravity="center"
                     android:inputType="textMultiLine"
                     android:scrollHorizontally="false"
                     android:padding="@dimen/_2sdp"
+                    android:visibility="gone"
                     />
 
                 <Button
@@ -123,7 +115,7 @@
                     android:layout_marginTop="40dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/save"
+                    android:text="@string/ok"
                     android:id="@+id/save_profile"
                     />
 

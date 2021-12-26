@@ -1,6 +1,11 @@
 package com.example.gabble.utilities;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.gabble.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,6 +22,7 @@ public class GetUserInformation {
     private FirebaseFirestore firebaseFirestore;
     private DocumentReference documentReference;
     private User user;
+    private String about;
 
     public GetUserInformation(String mobileNo) {
         this.mobileNo = mobileNo;
@@ -31,9 +37,15 @@ public class GetUserInformation {
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                user.name = documentSnapshot.getString(Constants.KEY_NAME).toString();
-                user.image = documentSnapshot.getString(Constants.KEY_IMAGE).toString();
-                user.about = documentSnapshot.getString(Constants.KEY_ABOUT).toString();
+                user.name = documentSnapshot.getString(Constants.KEY_NAME);
+                user.image = documentSnapshot.getString(Constants.KEY_IMAGE);
+                user.about = documentSnapshot.getString(Constants.KEY_ABOUT);
+                about = documentSnapshot.getString(Constants.KEY_ABOUT);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(Constants.TAG, "onFailure: ");
             }
         });
     }
@@ -43,7 +55,7 @@ public class GetUserInformation {
     }
 
     public String getAbout() {
-        return user.about;
+        return about;
     }
 
     public String getImage() {

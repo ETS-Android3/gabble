@@ -232,6 +232,12 @@ public class ChatActivity extends BaseActivity {
             documentReference.update(Constants.KEY_TYPING,false);
         });
 
+        binding.imageInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(),ReceiverProfileActivity.class);
+            intent.putExtra(Constants.KEY_USER,receiverUser);
+            startActivity(intent);
+        });
+
         // for Emoji keyboard
         EmojiPopup popup =
                 EmojiPopup.Builder.fromRootView(binding.getRoot()).build(binding.inputMessage);
@@ -293,25 +299,19 @@ public class ChatActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose File type");
 
-        String[] types = {"Image","Video","Document","Contacts","Location"};
+        String[] types = {"Image","Contacts"};
         builder.setItems(types, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
                         getImage();
-                        break;
+                        break; // image
                     case 1:
-                        break; // video
-                    case 2:
-                        break; // doc
-                    case 3:
                         Intent intent = new Intent(ChatActivity.this,ContactsActivity.class);
                         intent.putExtra(Constants.KEY_USER,receiverUser);
                         startActivity(intent);
                         break; // contacts
-                    case 4:
-                        break; // location
                 }
 
             }
