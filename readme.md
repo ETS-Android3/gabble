@@ -5,7 +5,6 @@
 Gabble is a chat Application which allows users to send text messages, voice messages, and share images, documents, and other content. This is Droidrush Repository of g-meister Team (Avishkar 2021- Annual Techfest of MNNIT Allahabad).
 <br><br>
 
-**Project Presentation** : [View Here]()<br />
 **App's APK** : [Download](https://drive.google.com/file/d/13E8oy88eeIDSzDKju9UEpVDzVPm2Bh0S/view?usp=sharing)
 
 
