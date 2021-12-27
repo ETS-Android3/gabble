@@ -57,16 +57,22 @@ Either, just download the APK  and try it out; OR : <br />
 </div>
 
 #### Archive and Unarchive chats
+<div>
 <img src="Screenshots/archive.jpg" width=250>
 <img src="Screenshots/unarchive.jpg" width=250><br />
+</div>
 
 #### View Stories and Create Story
+<div>
 <img src="Screenshots/Story.jpg" width=250>
 <img src="Screenshots/createStory.jpg" width=250><br />
+</div>
 
 #### QR code based Chat to me
+<div>
 <img src="Screenshots/MyQr.jpg" width=250>
 <img src="Screenshots/ScanQr.jpg" width=250><br />
+</div>
 
 
 
