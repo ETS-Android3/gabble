@@ -51,7 +51,7 @@ Either, just download the APK  and try it out; OR : <br />
 
 
 ##### User profile and chat
-![PROFILE](Screenshots/profile.jpg)
+![PROFILE](Screenshots/profile.jpg =250x250)
 ![PROFILE](Screenshots/chat.jpg)<br />
 ##### Archive and Unarchive chats
 ![Archive](Screenshots/archive.jpg)
