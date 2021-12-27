@@ -1,5 +1,5 @@
 <p align="center"> 
-  <img src="screenshots/ic_splash.png" alt="Pacman Logo" width="80px" height="80px">
+  <img src="Screenshots/ic_splash.png" alt="Pacman Logo" width="80px" height="80px">
 </p>
 <h2 align="center"> Gabble - Chat Application </h2>
 <hr>
