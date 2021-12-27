@@ -50,18 +50,21 @@ Either, just download the APK  and try it out; OR : <br />
 3. Deploy the app to your android device and you are good to go!<br />
 
 
-##### User profile and chat
-![PROFILE](Screenshots/profile.jpg)
-![PROFILE](Screenshots/chat.jpg)<br />
-##### Archive and Unarchive chats
-![Archive](Screenshots/archive.jpg)
-![UnArchive](Screenshots/unarchive.jpg)<br />
-##### View Stories and Create Story
-![View Story](Screenshots/Story.jpg)
-![Create Story](Screenshots/createStory.jpg)<br />
-##### QR code based Chat to me
-![My Qr](Screenshots/MyQr.jpg)
-![Scan Qr](Screenshots/ScanQr.jpg)<br />
+#### User profile and chat
+<img src="Screenshots/profile.jpg" width=250>
+<img src="Screenshots/chat.jpg" width=250> <br/>
+
+#### Archive and Unarchive chats
+<img src="Screenshots/archive.jpg" width=250>
+<img src="Screenshots/unarchive.jpg" width=250><br />
+
+#### View Stories and Create Story
+<img src="Screenshots/Story.jpg" width=250>
+<img src="Screenshots/createStory.jpg" width=250><br />
+
+#### QR code based Chat to me
+<img src="Screenshots/MyQr.jpg" width=250>
+<img src="Screenshots/ScanQr.jpg" width=250><br />
 
 
 
