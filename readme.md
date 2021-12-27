@@ -51,8 +51,10 @@ Either, just download the APK  and try it out; OR : <br />
 <hr>
 
 #### User profile and chat
+<div>
 <img src="Screenshots/profile.jpg" width=250>
 <img src="Screenshots/chat.jpg" width=250> <br/>
+</div>
 
 #### Archive and Unarchive chats
 <img src="Screenshots/archive.jpg" width=250>
