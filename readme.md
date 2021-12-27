@@ -48,7 +48,7 @@ Either, just download the APK  and try it out; OR : <br />
 1. CLone the project using link: https://github.com/gautom5987/gabble.git
 2. Import the Project in Android Studio
 3. Deploy the app to your android device and you are good to go!<br />
-
+<hr>
 
 #### User profile and chat
 <img src="Screenshots/profile.jpg" width=250>
